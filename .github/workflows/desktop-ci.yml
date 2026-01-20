@@ -1,4 +1,4 @@
-name: Android CI
+name: Desktop CI
 
 env:
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false"
@@ -10,7 +10,7 @@ on:
     branches: [ "main", "develop" ]
 
 concurrency:
-  group: android-${{ github.ref }}
+  group: desktop-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -27,9 +27,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
       - name: Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -40,5 +37,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build Android Debug
-        run: ./gradlew :composeApp:assembleDebug --stacktrace
+      - name: Build Desktop JAR
+        run: ./gradlew :composeApp:jvmJar --stacktrace
