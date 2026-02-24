@@ -393,6 +393,6 @@ obj/
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,swift,swiftpackagemanager,swiftpm,xcode,xcodeinjection,intellij+iml
 
-# Claude
-.claude/
-CLAUDE.md
+# Claude (로컬 설정만 제외)
+.claude/settings.local.json
+.claude/worktrees/
