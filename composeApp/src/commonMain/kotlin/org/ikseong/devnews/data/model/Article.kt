@@ -1,6 +1,6 @@
 package org.ikseong.devnews.data.model
 
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 data class Article(
     val id: Long,

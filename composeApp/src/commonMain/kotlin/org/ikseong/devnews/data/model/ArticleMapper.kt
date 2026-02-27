@@ -1,6 +1,6 @@
 package org.ikseong.devnews.data.model
 
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 fun ArticleDto.toArticle(): Article {
     val displayDate = parseInstantOrNull(publishedAt)
@@ -31,10 +31,12 @@ private fun String.normalizeTimestamp(): String {
     return this
         .replace(" ", "T")
         .let { normalized ->
-            if (normalized.matches(Regex(".*[+-]\\d{2}$"))) {
-                "${normalized}:00"
-            } else {
-                normalized
+            when {
+                normalized.matches(Regex(".*[+-]\\d{2}:\\d{2}$")) -> normalized
+                normalized.endsWith("Z") -> normalized
+                normalized.matches(Regex(".*[+-]\\d{4}$")) -> normalized.dropLast(2) + ":" + normalized.takeLast(2)
+                normalized.matches(Regex(".*[+-]\\d{2}$")) -> "${normalized}:00"
+                else -> normalized
             }
         }
 }
