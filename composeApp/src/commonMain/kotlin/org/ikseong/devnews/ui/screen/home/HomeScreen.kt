@@ -116,7 +116,7 @@ fun HomeScreen(
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = "오류가 발생했습니다",
+                                text = uiState.error ?: "오류가 발생했습니다",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.error,
                             )

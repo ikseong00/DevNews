@@ -71,8 +71,8 @@ fun AppNavigation() {
         ) {
             composable<Route.Home> {
                 HomeScreen(
-                    onArticleClick = { _, link ->
-                        navController.navigate(Route.Detail(articleId = 0, link = link))
+                    onArticleClick = { articleId, link ->
+                        navController.navigate(Route.Detail(articleId = articleId, link = link))
                     },
                 )
             }
