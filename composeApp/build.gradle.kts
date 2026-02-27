@@ -2,6 +2,7 @@
 
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -117,11 +118,12 @@ buildkonfig {
     packageName = "org.ikseong.devnews"
 
     defaultConfigs {
-        val localProperties = java.util.Properties().apply {
-            val file = rootProject.file("local.properties")
-            if (file.exists()) load(file.inputStream())
+        val properties = Properties()
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            file.inputStream().use { properties.load(it) }
         }
-        buildConfigField(STRING, "SUPABASE_URL", localProperties.getProperty("supabase.url", ""))
-        buildConfigField(STRING, "SUPABASE_KEY", localProperties.getProperty("supabase.key", ""))
+        buildConfigField(STRING, "SUPABASE_URL", properties.getProperty("supabase.url", ""))
+        buildConfigField(STRING, "SUPABASE_KEY", properties.getProperty("supabase.key", ""))
     }
 }
