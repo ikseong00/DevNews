@@ -13,12 +13,14 @@ import kotlinx.coroutines.launch
 import org.ikseong.devnews.data.model.Article
 import org.ikseong.devnews.data.repository.ArticleRepository
 import org.ikseong.devnews.data.repository.FavoriteRepository
+import org.ikseong.devnews.data.repository.HistoryRepository
 import org.ikseong.devnews.navigation.Route
 
 class DetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val articleRepository: ArticleRepository,
     private val favoriteRepository: FavoriteRepository,
+    private val historyRepository: HistoryRepository,
 ) : ViewModel() {
 
     private val detail = savedStateHandle.toRoute<Route.Detail>()
@@ -40,7 +42,11 @@ class DetailViewModel(
 
     private fun loadArticle() {
         viewModelScope.launch {
-            _article.value = articleRepository.getArticle(detail.articleId)
+            val article = articleRepository.getArticle(detail.articleId)
+            _article.value = article
+            if (article != null) {
+                historyRepository.record(article)
+            }
         }
     }
 
