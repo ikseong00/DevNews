@@ -47,6 +47,17 @@ class ArticleRepository(private val client: SupabaseClient) {
             .map { it.toArticle() }
     }
 
+    suspend fun getArticle(id: Long): Article? {
+        return client.from(TABLE_NAME)
+            .select {
+                filter { eq("id", id) }
+                limit(1)
+            }
+            .decodeList<ArticleDto>()
+            .firstOrNull()
+            ?.toArticle()
+    }
+
     companion object {
         private const val TABLE_NAME = "tech_blog_articles"
         const val DEFAULT_PAGE_SIZE = 20

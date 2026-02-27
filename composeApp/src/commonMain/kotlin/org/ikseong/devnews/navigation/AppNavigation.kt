@@ -16,7 +16,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import org.ikseong.devnews.ui.screen.detail.DetailScreen
 import org.ikseong.devnews.ui.screen.favorite.FavoriteScreen
 import org.ikseong.devnews.ui.screen.history.HistoryScreen
@@ -77,7 +76,11 @@ fun AppNavigation() {
                 )
             }
             composable<Route.Favorite> {
-                FavoriteScreen()
+                FavoriteScreen(
+                    onArticleClick = { articleId, link ->
+                        navController.navigate(Route.Detail(articleId = articleId, link = link))
+                    },
+                )
             }
             composable<Route.History> {
                 HistoryScreen()
@@ -85,10 +88,8 @@ fun AppNavigation() {
             composable<Route.Settings> {
                 SettingsScreen()
             }
-            composable<Route.Detail> { backStackEntry ->
-                val detail = backStackEntry.toRoute<Route.Detail>()
+            composable<Route.Detail> {
                 DetailScreen(
-                    link = detail.link,
                     onBack = { navController.popBackStack() },
                 )
             }
