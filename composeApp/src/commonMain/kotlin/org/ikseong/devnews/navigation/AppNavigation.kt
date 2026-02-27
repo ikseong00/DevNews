@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import org.ikseong.devnews.ui.screen.detail.DetailScreen
 import org.ikseong.devnews.ui.screen.favorite.FavoriteScreen
 import org.ikseong.devnews.ui.screen.history.HistoryScreen
 import org.ikseong.devnews.ui.screen.home.HomeScreen
@@ -27,33 +29,37 @@ fun AppNavigation() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val isDetailScreen = currentDestination?.hasRoute(Route.Detail::class) == true
+
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                TopLevelDestination.entries.forEach { destination ->
-                    val selected = currentDestination?.hierarchy?.any {
-                        it.hasRoute(destination.route::class)
-                    } == true
+            if (!isDetailScreen) {
+                NavigationBar {
+                    TopLevelDestination.entries.forEach { destination ->
+                        val selected = currentDestination?.hierarchy?.any {
+                            it.hasRoute(destination.route::class)
+                        } == true
 
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(destination.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                        NavigationBarItem(
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(destination.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
-                                contentDescription = destination.label,
-                            )
-                        },
-                        label = { Text(destination.label) },
-                    )
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
+                                    contentDescription = destination.label,
+                                )
+                            },
+                            label = { Text(destination.label) },
+                        )
+                    }
                 }
             }
         },
@@ -64,7 +70,11 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding),
         ) {
             composable<Route.Home> {
-                HomeScreen()
+                HomeScreen(
+                    onArticleClick = { articleId, link ->
+                        navController.navigate(Route.Detail(articleId = articleId, link = link))
+                    },
+                )
             }
             composable<Route.Favorite> {
                 FavoriteScreen()
@@ -74,6 +84,13 @@ fun AppNavigation() {
             }
             composable<Route.Settings> {
                 SettingsScreen()
+            }
+            composable<Route.Detail> { backStackEntry ->
+                val detail = backStackEntry.toRoute<Route.Detail>()
+                DetailScreen(
+                    link = detail.link,
+                    onBack = { navController.popBackStack() },
+                )
             }
         }
     }

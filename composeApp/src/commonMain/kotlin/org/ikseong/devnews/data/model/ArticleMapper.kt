@@ -22,7 +22,7 @@ private fun parseInstantOrNull(dateString: String?): Instant? {
     if (dateString == null) return null
     return try {
         Instant.parse(dateString.normalizeTimestamp())
-    } catch (_: Exception) {
+    } catch (_: IllegalArgumentException) {
         null
     }
 }

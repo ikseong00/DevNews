@@ -3,16 +3,18 @@ package org.ikseong.devnews.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.ikseong.devnews.data.model.ArticleCategory
 import org.ikseong.devnews.data.repository.ArticleRepository
+import kotlin.coroutines.cancellation.CancellationException
 
 @OptIn(FlowPreview::class)
 class HomeViewModel(
@@ -22,9 +24,10 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    private val searchQueryFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
+    private val searchQueryFlow = MutableStateFlow("")
 
     private var currentPage = 0
+    private var loadJob: Job? = null
 
     init {
         loadArticles()
@@ -32,13 +35,13 @@ class HomeViewModel(
     }
 
     fun loadArticles() {
+        loadJob?.cancel()
         currentPage = 0
         _uiState.update { it.copy(isLoading = true, error = null, hasMorePages = true) }
 
-        viewModelScope.launch {
-            runCatching {
-                fetchArticles(offset = 0)
-            }.onSuccess { articles ->
+        loadJob = viewModelScope.launch {
+            try {
+                val articles = fetchArticles(offset = 0)
                 _uiState.update {
                     it.copy(
                         articles = articles,
@@ -46,7 +49,9 @@ class HomeViewModel(
                         hasMorePages = articles.size >= ArticleRepository.DEFAULT_PAGE_SIZE,
                     )
                 }
-            }.onFailure { e ->
+            } catch (_: CancellationException) {
+                throw CancellationException()
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(isLoading = false, error = e.message)
                 }
@@ -62,9 +67,8 @@ class HomeViewModel(
         _uiState.update { it.copy(isLoadingMore = true) }
 
         viewModelScope.launch {
-            runCatching {
-                fetchArticles(offset = currentPage * ArticleRepository.DEFAULT_PAGE_SIZE)
-            }.onSuccess { articles ->
+            try {
+                val articles = fetchArticles(offset = currentPage * ArticleRepository.DEFAULT_PAGE_SIZE)
                 _uiState.update {
                     it.copy(
                         articles = it.articles + articles,
@@ -72,7 +76,9 @@ class HomeViewModel(
                         hasMorePages = articles.size >= ArticleRepository.DEFAULT_PAGE_SIZE,
                     )
                 }
-            }.onFailure { e ->
+            } catch (_: CancellationException) {
+                throw CancellationException()
+            } catch (e: Exception) {
                 currentPage--
                 _uiState.update {
                     it.copy(isLoadingMore = false, error = e.message)
@@ -89,7 +95,7 @@ class HomeViewModel(
 
     fun updateSearchQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
-        searchQueryFlow.tryEmit(query)
+        searchQueryFlow.value = query
     }
 
     fun toggleSearch() {
@@ -108,6 +114,7 @@ class HomeViewModel(
     private fun observeSearchQuery() {
         viewModelScope.launch {
             searchQueryFlow
+                .drop(1)
                 .debounce(300)
                 .distinctUntilChanged()
                 .collect { query ->
@@ -121,13 +128,13 @@ class HomeViewModel(
     }
 
     private fun searchArticles(query: String) {
+        loadJob?.cancel()
         currentPage = 0
         _uiState.update { it.copy(isLoading = true, error = null) }
 
-        viewModelScope.launch {
-            runCatching {
-                articleRepository.searchArticles(query)
-            }.onSuccess { articles ->
+        loadJob = viewModelScope.launch {
+            try {
+                val articles = articleRepository.searchArticles(query)
                 _uiState.update {
                     it.copy(
                         articles = articles,
@@ -135,7 +142,9 @@ class HomeViewModel(
                         hasMorePages = false,
                     )
                 }
-            }.onFailure { e ->
+            } catch (_: CancellationException) {
+                throw CancellationException()
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(isLoading = false, error = e.message)
                 }
