@@ -83,7 +83,11 @@ fun AppNavigation() {
                 )
             }
             composable<Route.History> {
-                HistoryScreen()
+                HistoryScreen(
+                    onArticleClick = { articleId, link ->
+                        navController.navigate(Route.Detail(articleId = articleId, link = link))
+                    },
+                )
             }
             composable<Route.Settings> {
                 SettingsScreen()
