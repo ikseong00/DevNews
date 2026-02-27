@@ -1,5 +1,6 @@
 @file:Suppress("DEPRECATION")
 
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -10,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {
@@ -109,4 +111,17 @@ dependencies {
 
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+buildkonfig {
+    packageName = "org.ikseong.devnews"
+
+    defaultConfigs {
+        val localProperties = java.util.Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) load(file.inputStream())
+        }
+        buildConfigField(STRING, "SUPABASE_URL", localProperties.getProperty("supabase.url", ""))
+        buildConfigField(STRING, "SUPABASE_KEY", localProperties.getProperty("supabase.key", ""))
+    }
 }
