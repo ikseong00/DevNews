@@ -9,18 +9,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.ikseong.devnews.ui.theme.DevNewsTheme
 
 @Composable
 fun App() {
-    MaterialTheme {
+    DevNewsTheme {
         Box(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
+                .background(MaterialTheme.colorScheme.background)
                 .safeContentPadding()
                 .fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            Text("DevNews")
+            Text(
+                text = "DevNews",
+                color = MaterialTheme.colorScheme.onBackground,
+            )
         }
     }
 }
