@@ -21,6 +21,7 @@ ktor = "3.3.3"
 navigation-compose = "2.9.2"
 room = "2.8.4"
 sqlite = "2.6.2"
+buildkonfig = "0.15.2"
 supabase = "3.3.0"
 
 [libraries]
@@ -57,3 +58,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
