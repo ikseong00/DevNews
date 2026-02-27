@@ -43,7 +43,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(projects.shared)
+
 
             // Supabase
             implementation(libs.supabase.postgrest)
