@@ -13,11 +13,9 @@ class SettingsRepository(
 ) {
     val themeMode: Flow<ThemeMode> = dataStore.data.map { preferences ->
         val name = preferences[THEME_MODE_KEY]
-        if (name != null) {
-            ThemeMode.valueOf(name)
-        } else {
-            ThemeMode.SYSTEM
-        }
+        name?.let {
+            runCatching { ThemeMode.valueOf(it) }.getOrNull()
+        } ?: ThemeMode.SYSTEM
     }
 
     suspend fun setThemeMode(mode: ThemeMode) {

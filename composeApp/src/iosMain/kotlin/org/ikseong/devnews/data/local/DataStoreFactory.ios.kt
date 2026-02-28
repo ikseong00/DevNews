@@ -11,7 +11,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 actual class DataStoreFactory {
-    actual fun create(): DataStore<Preferences> {
+    private val dataStore: DataStore<Preferences> by lazy {
         val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
             directory = NSDocumentDirectory,
             inDomain = NSUserDomainMask,
@@ -20,8 +20,10 @@ actual class DataStoreFactory {
             error = null,
         )
         val path = requireNotNull(documentDirectory?.path) + "/$DATASTORE_FILE_NAME"
-        return PreferenceDataStoreFactory.createWithPath(
+        PreferenceDataStoreFactory.createWithPath(
             produceFile = { path.toPath() },
         )
     }
+
+    actual fun create(): DataStore<Preferences> = dataStore
 }
