@@ -36,11 +36,16 @@
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
+/* Begin PBXBuildFile section */
+		FB03A2B3C4D5E6F7A8B9C0D3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FB02A2B3C4D5E6F7A8B9C0D2 /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		9943F7060E3AE139283C540C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB03A2B3C4D5E6F7A8B9C0D3 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +90,7 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				FB02A2B3C4D5E6F7A8B9C0D2 /* FirebaseAnalytics */,
 			);
 			productName = iosApp;
 			productReference = D868FD69262D8290C51F2F05 /* DevNews.app */;
@@ -118,6 +124,9 @@
 			productRefGroup = D4F608120BEEB12529FF69BF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packageReferences = (
+				FB01A2B3C4D5E6F7A8B9C0D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			targets = (
 				4E185C193EC4163413D12B12 /* iosApp */,
 			);
@@ -368,6 +377,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FB01A2B3C4D5E6F7A8B9C0D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FB02A2B3C4D5E6F7A8B9C0D2 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FB01A2B3C4D5E6F7A8B9C0D1 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B6416EA356AE9E468D6B7E24 /* Project object */;
 }
