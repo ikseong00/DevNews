@@ -1,9 +1,11 @@
 import SwiftUI
 import ComposeApp
+import FirebaseCore
 
 @main
 struct iOSApp: App {
     init() {
+        FirebaseApp.configure()
         KoinHelperKt.doInitKoin()
     }
 
