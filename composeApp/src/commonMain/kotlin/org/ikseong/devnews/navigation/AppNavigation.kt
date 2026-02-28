@@ -80,12 +80,30 @@ fun AppNavigation() {
                     onArticleClick = { articleId, link ->
                         navController.navigate(Route.Detail(articleId = articleId, link = link))
                     },
+                    onNavigateToHome = {
+                        navController.navigate(Route.Home) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                 )
             }
             composable<Route.History> {
                 HistoryScreen(
                     onArticleClick = { articleId, link ->
                         navController.navigate(Route.Detail(articleId = articleId, link = link))
+                    },
+                    onNavigateToHome = {
+                        navController.navigate(Route.Home) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                 )
             }

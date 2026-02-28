@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import kotlin.time.Clock
 import org.ikseong.devnews.data.model.Article
 import org.ikseong.devnews.data.model.ArticleCategory
+import org.ikseong.devnews.data.model.HistoryArticle
 
 fun Article.toFavoriteEntity(): FavoriteEntity = FavoriteEntity(
     articleId = id,
@@ -49,4 +50,9 @@ fun ReadHistoryEntity.toArticle(): Article = Article(
     },
     blogSource = blogSource,
     displayDate = Instant.fromEpochMilliseconds(displayDate),
+)
+
+fun ReadHistoryEntity.toHistoryArticle(): HistoryArticle = HistoryArticle(
+    article = toArticle(),
+    readAt = Instant.fromEpochMilliseconds(readAt),
 )
