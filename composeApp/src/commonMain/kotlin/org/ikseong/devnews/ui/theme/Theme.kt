@@ -69,7 +69,7 @@ fun DevNewsTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = DevNewsTypography,
+        typography = DevNewsTypography(),
         content = content,
     )
 }

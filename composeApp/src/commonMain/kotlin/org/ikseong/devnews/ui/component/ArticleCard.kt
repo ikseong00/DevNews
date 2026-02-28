@@ -46,6 +46,16 @@ fun ArticleCard(
                 overflow = TextOverflow.Ellipsis,
             )
 
+            if (!article.summary.isNullOrBlank()) {
+                Text(
+                    text = article.summary,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,

@@ -30,6 +30,16 @@ fun AppNavigation() {
 
     val isDetailScreen = currentDestination?.hasRoute(Route.Detail::class) == true
 
+    val navigateToHome: () -> Unit = {
+        navController.navigate(Route.Home) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         bottomBar = {
             if (!isDetailScreen) {
@@ -80,6 +90,7 @@ fun AppNavigation() {
                     onArticleClick = { articleId, link ->
                         navController.navigate(Route.Detail(articleId = articleId, link = link))
                     },
+                    onNavigateToHome = navigateToHome,
                 )
             }
             composable<Route.History> {
@@ -87,6 +98,7 @@ fun AppNavigation() {
                     onArticleClick = { articleId, link ->
                         navController.navigate(Route.Detail(articleId = articleId, link = link))
                     },
+                    onNavigateToHome = navigateToHome,
                 )
             }
             composable<Route.Settings> {
