@@ -2,6 +2,7 @@ package org.ikseong.devnews.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -14,12 +15,15 @@ import devnews.composeapp.generated.resources.pretendard_semibold
 import org.jetbrains.compose.resources.Font
 
 val PretendardFontFamily: FontFamily
-    @Composable get() = FontFamily(
-        Font(Res.font.pretendard_regular, FontWeight.Normal),
-        Font(Res.font.pretendard_medium, FontWeight.Medium),
-        Font(Res.font.pretendard_semibold, FontWeight.SemiBold),
-        Font(Res.font.pretendard_bold, FontWeight.Bold),
-    )
+    @Composable get() {
+        val regular = Font(Res.font.pretendard_regular, FontWeight.Normal)
+        val medium = Font(Res.font.pretendard_medium, FontWeight.Medium)
+        val semiBold = Font(Res.font.pretendard_semibold, FontWeight.SemiBold)
+        val bold = Font(Res.font.pretendard_bold, FontWeight.Bold)
+        return remember(regular, medium, semiBold, bold) {
+            FontFamily(regular, medium, semiBold, bold)
+        }
+    }
 
 @Composable
 fun DevNewsTypography(): Typography {

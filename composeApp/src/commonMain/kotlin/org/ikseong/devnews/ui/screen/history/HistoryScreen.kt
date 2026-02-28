@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -81,7 +82,7 @@ fun HistoryScreen(
     ) { innerPadding ->
         if (uiState.isEmpty) {
             EmptyState(
-                icon = Icons.Filled.DeleteSweep,
+                icon = Icons.Filled.History,
                 message = "읽기이력이 없습니다",
                 description = "아티클을 읽으면 여기에 기록됩니다",
                 ctaText = "홈으로 이동",

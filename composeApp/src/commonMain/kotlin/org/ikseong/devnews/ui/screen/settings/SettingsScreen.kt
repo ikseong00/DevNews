@@ -39,6 +39,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.ikseong.devnews.data.model.ThemeMode
 import org.koin.compose.viewmodel.koinViewModel
@@ -135,8 +138,13 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            val currentYear = remember {
+                val now = kotlin.time.Clock.System.now()
+                Instant.fromEpochMilliseconds(now.toEpochMilliseconds())
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).year
+            }
             Text(
-                text = "\u00A9 2025 DevNews. All rights reserved.",
+                text = "\u00A9 $currentYear DevNews. All rights reserved.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                 modifier = Modifier
